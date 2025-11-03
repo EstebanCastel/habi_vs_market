@@ -481,7 +481,7 @@ export default function Home() {
                     stepRefs.current[index] = element;
                   }
                 }}
-                className="h-[85vh]"
+                className="h-[50vh]"
               >
                 <div className="pointer-events-none absolute left-1/2 top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2"></div>
               </div>
