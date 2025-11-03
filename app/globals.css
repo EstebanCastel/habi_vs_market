@@ -52,17 +52,16 @@ body {
 .text-metallic-purple {
   background: linear-gradient(
     135deg,
-    #5a2d91 0%,
+    #6b3da8 0%,
     #7400C2 25%,
-    #EACDFE 50%,
+    #b899e0 50%,
     #7400C2 75%,
-    #5a2d91 100%
+    #6b3da8 100%
   );
   background-size: 200% auto;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shine 3s linear infinite;
+  animation: shine 8s linear infinite;
   font-weight: 900;
-  text-shadow: 0 0 10px rgba(116, 0, 194, 0.5);
 }
