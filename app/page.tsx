@@ -261,8 +261,15 @@ export default function Home() {
                   </p>
                 </div>
 
-                <p ref={marketDescRef} className="text-sm text-slate-600 font-medium text-center">
-                  {getMarketDescription(progress)}
+                <p ref={marketDescRef} className="text-sm font-medium text-center">
+                  {progress === 6 ? (
+                    <>
+                      <span className="text-metallic-purple text-lg">¡Consigues comprador!</span>
+                      <span className="text-slate-600"> Pagas gastos de tener un inmueble</span>
+                    </>
+                  ) : (
+                    <span className="text-slate-600">{getMarketDescription(progress)}</span>
+                  )}
                 </p>
               </div>
 
