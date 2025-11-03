@@ -306,27 +306,48 @@ export default function Home() {
                 );
               })}
               
-              {/* Línea Mercado */}
+              {/* Línea Mercado - Parte Roja (Meses 1-8 o hasta el progress actual) */}
               {progress > 0 && (
                 <polyline
-                  points={[...Array(Math.min(progress, 9))].map((_, i) => {
+                  points={[...Array(Math.min(progress, 8))].map((_, i) => {
                     const month = i + 1;
                     const x = 60 + (month * (700 / 9));
-                    let value;
-                    if (month === 9) {
-                      value = marketFinalSale - (months * marketExpensePerMonth);
-                    } else {
-                      value = 0; // Ponemos en 0 para que esté en el eje
-                    }
+                    const value = 0; // Gastos, se queda en 0
                     const y = 280 - (value / 110) * 230;
                     return `${x},${y}`;
                   }).join(' ')}
                   fill="none"
-                  stroke={progress === 9 ? "#16A34A" : "#DC2626"}
+                  stroke="#DC2626"
                   strokeWidth="4"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeDasharray={progress < 9 ? "8 4" : "0"}
+                  strokeDasharray="8 4"
+                />
+              )}
+              
+              {/* Línea Mercado - Parte Verde (Solo del mes 8 al mes 9) */}
+              {progress === 9 && (
+                <polyline
+                  points={(() => {
+                    const points = [];
+                    // Mes 8
+                    const x8 = 60 + (8 * (700 / 9));
+                    const y8 = 280;
+                    points.push(`${x8},${y8}`);
+                    
+                    // Mes 9
+                    const x9 = 60 + (9 * (700 / 9));
+                    const value9 = marketFinalSale - (months * marketExpensePerMonth);
+                    const y9 = 280 - (value9 / 110) * 230;
+                    points.push(`${x9},${y9}`);
+                    
+                    return points.join(' ');
+                  })()}
+                  fill="none"
+                  stroke="#16A34A"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               )}
               
