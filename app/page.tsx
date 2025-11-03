@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import confetti from "canvas-confetti";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,8 +37,42 @@ export default function Home() {
   // Descripciones por mes para Mercado
   const getMarketDescription = (month: number) => {
     if (month === 9) return "Recibes la venta menos los gastos acumulados";
+    if (month === 6) return "¡Consigues comprador! Pagas gastos de tener un inmueble";
     return "Pagas gastos de tener un inmueble";
   };
+
+  // Función para disparar confetti
+  const throwConfetti = () => {
+    const count = 200;
+    const defaults = {
+      origin: { y: 0.3 },
+      colors: ["#7400C2", "#8A00E6", "#EACDFE", "#F9F0FF", "#FFD700", "#FF69B4", "#00CED1"],
+    };
+
+    function fire(particleRatio: number, opts: confetti.Options) {
+      confetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio),
+      });
+    }
+
+    fire(0.25, { spread: 26, startVelocity: 55 });
+    fire(0.2, { spread: 60 });
+    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+    fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+    fire(0.1, { spread: 120, startVelocity: 45 });
+  };
+
+  // Disparar confetti cuando llegue al mes 6
+  useEffect(() => {
+    if (progress === 6) {
+      setTimeout(() => {
+        throwConfetti();
+      }, 300);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [progress]);
 
   // Animar contadores cuando cambia el progress
   useEffect(() => {
