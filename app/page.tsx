@@ -39,6 +39,7 @@ export default function Home() {
   // Descripciones por mes para Mercado
   const getMarketDescription = (month: number) => {
     if (month === 9) return "Recibes la venta menos los gastos acumulados";
+    if (month === 7) return "Comienzan los trámites del banco. Pagas gastos de tener un inmueble";
     if (month === 6) return "¡Consigues comprador! Pagas gastos de tener un inmueble";
     return "Pagas gastos de tener un inmueble";
   };
@@ -265,6 +266,11 @@ export default function Home() {
                   {progress === 6 ? (
                     <>
                       <span className="text-metallic-purple text-lg">¡Consigues comprador!</span>
+                      <span className="text-slate-600"> Pagas gastos de tener un inmueble</span>
+                    </>
+                  ) : progress === 7 ? (
+                    <>
+                      <span className="text-metallic-purple text-lg">Comienzan los trámites del banco.</span>
                       <span className="text-slate-600"> Pagas gastos de tener un inmueble</span>
                     </>
                   ) : (
