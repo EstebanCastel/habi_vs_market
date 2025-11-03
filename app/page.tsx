@@ -260,18 +260,20 @@ export default function Home() {
                   <p className={`text-5xl font-black text-center ${marketTotal >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                     ${animatedMarketTotal.toFixed(1)}M
                   </p>
-                </div>
+              </div>
 
                 <p ref={marketDescRef} className="text-sm font-medium text-center">
                   {progress === 6 ? (
                     <>
                       <span className="text-metallic-purple text-lg">¡Consigues comprador!</span>
-                      <span className="text-slate-600"> Pagas gastos de tener un inmueble</span>
+                      <br />
+                      <span className="text-slate-600">Pagas gastos de tener un inmueble</span>
                     </>
                   ) : progress === 7 ? (
                     <>
-                      <span className="text-metallic-purple text-lg">Comienzan los trámites del banco.</span>
-                      <span className="text-slate-600"> Pagas gastos de tener un inmueble</span>
+                      <span className="text-metallic-purple text-lg">Comienzan los trámites del banco</span>
+                      <br />
+                      <span className="text-slate-600">Pagas gastos de tener un inmueble</span>
                     </>
                   ) : (
                     <span className="text-slate-600">{getMarketDescription(progress)}</span>
@@ -301,19 +303,19 @@ export default function Home() {
             </div>
             
             <svg viewBox="0 0 800 320" className="w-full h-auto">
-              <defs>
+                  <defs>
                 {/* Gradiente para área Habi */}
                 <linearGradient id="habiGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                   <stop offset="0%" style={{ stopColor: "#7400C2", stopOpacity: 0.2 }} />
                   <stop offset="100%" style={{ stopColor: "#7400C2", stopOpacity: 0.02 }} />
-                </linearGradient>
+                    </linearGradient>
                 
                 {/* Gradiente para área Mercado */}
                 <linearGradient id="marketGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                   <stop offset="0%" style={{ stopColor: "#DC2626", stopOpacity: 0.1 }} />
                   <stop offset="100%" style={{ stopColor: "#DC2626", stopOpacity: 0.02 }} />
-                </linearGradient>
-              </defs>
+                    </linearGradient>
+                  </defs>
               
               {/* Grid horizontal */}
               <line x1="60" y1="50" x2="760" y2="50" stroke="#F1F5F9" strokeWidth="1" />
@@ -334,12 +336,12 @@ export default function Home() {
               {/* Labels Eje X (Meses) */}
               {[...Array(9)].map((_, i) => {
                 const x = 60 + ((i + 1) * (700 / 9));
-                return (
+                      return (
                   <text key={`month-${i}`} x={x} y="305" textAnchor="middle" fontSize="13" fill="#475569" fontWeight="600">
                     M{i + 1}
                   </text>
-                );
-              })}
+                      );
+                    })}
               
               {/* Área de relleno Habi */}
               {progress > 0 && (
@@ -368,7 +370,7 @@ export default function Home() {
                   fill="none"
                   stroke="#7400C2"
                   strokeWidth="4"
-                  strokeLinecap="round"
+                          strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               )}
@@ -393,7 +395,7 @@ export default function Home() {
                         <rect x={x - 35} y={y - 35} width="70" height="24" rx="4" fill="#7400C2" />
                         <text x={x} y={y - 17} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
                           ${value.toFixed(1)}M
-                        </text>
+                    </text>
                       </>
                     )}
                   </g>
@@ -471,13 +473,13 @@ export default function Home() {
                         <rect x={x - 35} y={y + 11} width="70" height="24" rx="4" fill={color} />
                         <text x={x} y={y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
                           {month === 9 ? `$${value.toFixed(1)}M` : `-$${(month * marketExpensePerMonth).toFixed(1)}M`}
-                        </text>
+                    </text>
                       </>
                     )}
                   </g>
                 );
               })}
-            </svg>
+                </svg>
           </div>
 
         </div>
