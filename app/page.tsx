@@ -12,7 +12,7 @@ export default function Home() {
   const [progress, setProgress] = useState(1);
   const [animatedHabiTotal, setAnimatedHabiTotal] = useState(0);
   const [animatedMarketTotal, setAnimatedMarketTotal] = useState(0);
-  const [confettiDisparado, setConfettiDisparado] = useState(false);
+  const confettiDisparadoRef = useRef(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const habiCounterRef = useRef<HTMLDivElement>(null);
   const marketCounterRef = useRef<HTMLDivElement>(null);
@@ -68,14 +68,13 @@ export default function Home() {
 
   // Disparar confetti cuando llegue al mes 6 (solo una vez)
   useEffect(() => {
-    if (progress === 6 && !confettiDisparado) {
+    if (progress === 6 && !confettiDisparadoRef.current) {
       setTimeout(() => {
         throwConfetti();
-        setConfettiDisparado(true);
+        confettiDisparadoRef.current = true;
       }, 300);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [progress, confettiDisparado]);
+  }, [progress]);
 
   // Animar contadores cuando cambia el progress
   useEffect(() => {
