@@ -190,102 +190,145 @@ export default function Home() {
 
           {/* Gráfica de Ingresos vs Egresos */}
           <div className="mt-8 pt-8 border-t border-slate-200">
-            <p className="text-xs uppercase tracking-widest text-slate-400 mb-6 font-semibold">Ingresos acumulados</p>
-            
-            <svg viewBox="0 0 800 300" className="w-full h-auto">
-              {/* Eje Y */}
-              <line x1="60" y1="20" x2="60" y2="260" stroke="#E5E7EB" strokeWidth="1" />
+            <div className="flex items-center justify-between mb-6">
+              <p className="text-xs uppercase tracking-widest text-slate-400 font-semibold">Evolución financiera</p>
               
-              {/* Eje X */}
-              <line x1="60" y1="260" x2="760" y2="260" stroke="#E5E7EB" strokeWidth="1" />
+              {/* Leyenda */}
+              <div className="flex gap-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "#7400C2" }}></div>
+                  <span className="text-xs font-semibold text-slate-700">Habi</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <span className="text-xs font-semibold text-slate-700">Mercado</span>
+                </div>
+              </div>
+            </div>
+            
+            <svg viewBox="0 0 800 320" className="w-full h-auto">
+              <defs>
+                {/* Gradiente para área Habi */}
+                <linearGradient id="habiGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style={{ stopColor: "#7400C2", stopOpacity: 0.2 }} />
+                  <stop offset="100%" style={{ stopColor: "#7400C2", stopOpacity: 0.02 }} />
+                </linearGradient>
+                
+                {/* Gradiente para área Mercado */}
+                <linearGradient id="marketGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style={{ stopColor: "#DC2626", stopOpacity: 0.1 }} />
+                  <stop offset="100%" style={{ stopColor: "#DC2626", stopOpacity: 0.02 }} />
+                </linearGradient>
+              </defs>
+              
+              {/* Grid horizontal */}
+              <line x1="60" y1="50" x2="760" y2="50" stroke="#F1F5F9" strokeWidth="1" />
+              <line x1="60" y1="110" x2="760" y2="110" stroke="#F1F5F9" strokeWidth="1" />
+              <line x1="60" y1="170" x2="760" y2="170" stroke="#F1F5F9" strokeWidth="1" />
+              <line x1="60" y1="230" x2="760" y2="230" stroke="#F1F5F9" strokeWidth="1" />
+              
+              {/* Eje X (línea $0) */}
+              <line x1="60" y1="280" x2="760" y2="280" stroke="#94A3B8" strokeWidth="2" />
+              
+              {/* Labels Eje Y */}
+              <text x="45" y="55" textAnchor="end" fontSize="12" fill="#64748B" fontWeight="600">$110M</text>
+              <text x="45" y="115" textAnchor="end" fontSize="12" fill="#64748B" fontWeight="600">$80M</text>
+              <text x="45" y="175" textAnchor="end" fontSize="12" fill="#64748B" fontWeight="600">$50M</text>
+              <text x="45" y="235" textAnchor="end" fontSize="12" fill="#64748B" fontWeight="600">$20M</text>
+              <text x="45" y="285" textAnchor="end" fontSize="12" fill="#64748B" fontWeight="700">$0</text>
               
               {/* Labels Eje X (Meses) */}
               {[...Array(9)].map((_, i) => {
                 const x = 60 + ((i + 1) * (700 / 9));
                 return (
-                  <g key={`label-${i}`}>
-                    <line x1={x} y1="260" x2={x} y2="265" stroke="#E5E7EB" strokeWidth="1" />
-                    <text x={x} y="280" textAnchor="middle" fontSize="12" fill="#94A3B8" fontWeight="500">
-                      {i + 1}
-                    </text>
-                  </g>
+                  <text key={`month-${i}`} x={x} y="305" textAnchor="middle" fontSize="13" fill="#475569" fontWeight="600">
+                    M{i + 1}
+                  </text>
                 );
               })}
               
-              {/* Label Eje X */}
-              <text x="410" y="295" textAnchor="middle" fontSize="11" fill="#94A3B8" fontWeight="600">
-                MESES
-              </text>
-              
-              {/* Labels Eje Y */}
-              <text x="20" y="30" fontSize="11" fill="#94A3B8" fontWeight="500">$110M</text>
-              <text x="20" y="140" fontSize="11" fill="#94A3B8" fontWeight="500">$50M</text>
-              <text x="20" y="265" fontSize="11" fill="#94A3B8" fontWeight="500">$0</text>
-              
-              {/* Línea de referencia $0 */}
-              <line x1="60" y1="260" x2="760" y2="260" stroke="#E5E7EB" strokeWidth="2" strokeDasharray="4 4" />
+              {/* Área de relleno Habi */}
+              {progress > 0 && (
+                <polygon
+                  points={`60,280 ${[...Array(Math.min(progress, 9))].map((_, i) => {
+                    const month = i + 1;
+                    const x = 60 + (month * (700 / 9));
+                    const value = month * habiPerMonth;
+                    const y = 280 - (value / 110) * 230;
+                    return `${x},${y}`;
+                  }).join(' ')} ${60 + (Math.min(progress, 9) * (700 / 9))},280`}
+                  fill="url(#habiGradient)"
+                />
+              )}
               
               {/* Línea Habi (morado) */}
-              <polyline
-                points={[...Array(Math.min(progress, 9))].map((_, i) => {
-                  const month = i + 1;
-                  const x = 60 + (month * (700 / 9));
-                  const value = month * habiPerMonth;
-                  const y = 260 - (value / 110) * 240;
-                  return `${x},${y}`;
-                }).join(' ')}
-                fill="none"
-                stroke="#7400C2"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              {progress > 0 && (
+                <polyline
+                  points={[...Array(Math.min(progress, 9))].map((_, i) => {
+                    const month = i + 1;
+                    const x = 60 + (month * (700 / 9));
+                    const value = month * habiPerMonth;
+                    const y = 280 - (value / 110) * 230;
+                    return `${x},${y}`;
+                  }).join(' ')}
+                  fill="none"
+                  stroke="#7400C2"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              )}
               
-              {/* Puntos Habi */}
+              {/* Puntos y valores Habi */}
               {[...Array(Math.min(progress, 9))].map((_, i) => {
                 const month = i + 1;
                 const x = 60 + (month * (700 / 9));
                 const value = month * habiPerMonth;
-                const y = 260 - (value / 110) * 240;
+                const y = 280 - (value / 110) * 230;
+                const isCurrentMonth = month === progress;
+                
                 return (
-                  <circle
-                    key={`habi-${i}`}
-                    cx={x}
-                    cy={y}
-                    r="5"
-                    fill="#7400C2"
-                    opacity={month === progress ? 1 : 0.6}
-                  />
+                  <g key={`habi-point-${i}`}>
+                    {/* Punto */}
+                    <circle cx={x} cy={y} r={isCurrentMonth ? 8 : 6} fill="white" stroke="#7400C2" strokeWidth="3" />
+                    <circle cx={x} cy={y} r={isCurrentMonth ? 4 : 3} fill="#7400C2" />
+                    
+                    {/* Valor en el punto actual */}
+                    {isCurrentMonth && (
+                      <>
+                        <rect x={x - 35} y={y - 35} width="70" height="24" rx="4" fill="#7400C2" />
+                        <text x={x} y={y - 17} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
+                          ${value.toFixed(1)}M
+                        </text>
+                      </>
+                    )}
+                  </g>
                 );
               })}
               
-              {/* Línea Mercado (roja en negativos, verde en positivo) */}
-              <polyline
-                points={[...Array(Math.min(progress, 9))].map((_, i) => {
-                  const month = i + 1;
-                  const x = 60 + (month * (700 / 9));
-                  let value;
-                  if (month === 9) {
-                    value = marketFinalSale - (months * marketExpensePerMonth);
-                  } else {
-                    value = -(month * marketExpensePerMonth);
-                  }
-                  // Ajustar Y para valores negativos (hacia abajo del eje)
-                  let y;
-                  if (value >= 0) {
-                    y = 260 - (value / 110) * 240;
-                  } else {
-                    // Para negativos, ponemos cerca del eje 0 pero visible
-                    y = 260 + Math.abs(value) * 10;
-                  }
-                  return `${x},${y}`;
-                }).join(' ')}
-                fill="none"
-                stroke={progress === 9 && marketTotal > 0 ? "#16A34A" : "#DC2626"}
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              {/* Línea Mercado */}
+              {progress > 0 && (
+                <polyline
+                  points={[...Array(Math.min(progress, 9))].map((_, i) => {
+                    const month = i + 1;
+                    const x = 60 + (month * (700 / 9));
+                    let value;
+                    if (month === 9) {
+                      value = marketFinalSale - (months * marketExpensePerMonth);
+                    } else {
+                      value = 0; // Ponemos en 0 para que esté en el eje
+                    }
+                    const y = 280 - (value / 110) * 230;
+                    return `${x},${y}`;
+                  }).join(' ')}
+                  fill="none"
+                  stroke={progress === 9 ? "#16A34A" : "#DC2626"}
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray={progress < 9 ? "8 4" : "0"}
+                />
+              )}
               
               {/* Puntos Mercado */}
               {[...Array(Math.min(progress, 9))].map((_, i) => {
@@ -295,35 +338,30 @@ export default function Home() {
                 if (month === 9) {
                   value = marketFinalSale - (months * marketExpensePerMonth);
                 } else {
-                  value = -(month * marketExpensePerMonth);
+                  value = 0;
                 }
-                let y;
-                if (value >= 0) {
-                  y = 260 - (value / 110) * 240;
-                } else {
-                  y = 260 + Math.abs(value) * 10;
-                }
-                const color = month === 9 && value > 0 ? "#16A34A" : "#DC2626";
+                const y = 280 - (value / 110) * 230;
+                const color = month === 9 ? "#16A34A" : "#DC2626";
+                const isCurrentMonth = month === progress;
+                
                 return (
-                  <circle
-                    key={`market-${i}`}
-                    cx={x}
-                    cy={y}
-                    r="5"
-                    fill={color}
-                    opacity={month === progress ? 1 : 0.6}
-                  />
+                  <g key={`market-point-${i}`}>
+                    {/* Punto */}
+                    <circle cx={x} cy={y} r={isCurrentMonth ? 8 : 6} fill="white" stroke={color} strokeWidth="3" />
+                    <circle cx={x} cy={y} r={isCurrentMonth ? 4 : 3} fill={color} />
+                    
+                    {/* Valor en el punto actual */}
+                    {isCurrentMonth && (
+                      <>
+                        <rect x={x - 35} y={y + 11} width="70" height="24" rx="4" fill={color} />
+                        <text x={x} y={y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
+                          {month === 9 ? `$${value.toFixed(1)}M` : `-$${(month * marketExpensePerMonth).toFixed(1)}M`}
+                        </text>
+                      </>
+                    )}
+                  </g>
                 );
               })}
-              
-              {/* Leyenda */}
-              <g transform="translate(600, 40)">
-                <circle cx="0" cy="0" r="5" fill="#7400C2" />
-                <text x="15" y="5" fontSize="12" fill="#1E293B" fontWeight="600">Habi</text>
-                
-                <circle cx="0" cy="25" r="5" fill="#DC2626" />
-                <text x="15" y="30" fontSize="12" fill="#1E293B" fontWeight="600">Mercado</text>
-              </g>
             </svg>
           </div>
 
