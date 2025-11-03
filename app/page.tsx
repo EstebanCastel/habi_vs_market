@@ -184,13 +184,13 @@ export default function Home() {
             <div className="flex-1 grid md:grid-cols-2 gap-6">
               
               {/* Habi */}
-              <div ref={habiCardRef} className="space-y-4">
-                <p className="text-xs uppercase tracking-widest font-black" style={{ color: "#7400C2" }}>
+              <div ref={habiCardRef} className="space-y-4 flex flex-col items-center">
+                <p className="text-xs uppercase tracking-widest font-black text-center" style={{ color: "#7400C2" }}>
                   Habi
                 </p>
                 
                 {/* Logo Habi */}
-                <div className="flex justify-center py-2">
+                <div className="py-2">
                   <Image 
                     src="/habi.png" 
                     alt="Habi" 
@@ -201,55 +201,50 @@ export default function Home() {
                 </div>
                 
                 <div ref={habiCounterRef}>
-                  <p className="text-5xl font-black" style={{ color: "#7400C2" }}>
+                  <p className="text-5xl font-black text-center" style={{ color: "#7400C2" }}>
                     ${animatedHabiTotal.toFixed(1)}M
                   </p>
                 </div>
 
-                <p ref={habiDescRef} className="text-sm text-slate-600 font-medium">
+                <p ref={habiDescRef} className="text-sm text-slate-600 font-medium text-center">
                   {getHabiDescription(progress)}
                 </p>
               </div>
 
               {/* Mercado */}
-              <div ref={marketCardRef} className="space-y-4 relative">
-                <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-widest font-black text-slate-700">
-                    Mercado tradicional
-                  </p>
-                  
-                  {/* Imagen del banco - aparece desde el mes 7 */}
-                  {progress >= 7 && (
-                    <div className="animate-fadeIn">
-                      <Image 
-                        src="/banco.png" 
-                        alt="Banco" 
-                        width={50} 
-                        height={50}
-                        className="object-contain"
-                      />
-                    </div>
+              <div ref={marketCardRef} className="space-y-4 flex flex-col items-center">
+                <p className="text-xs uppercase tracking-widest font-black text-center text-slate-700">
+                  Mercado tradicional
+                </p>
+                
+                {/* Imagen Mercado / Banco - cambia en mes 7+ */}
+                <div className="py-2">
+                  {progress >= 7 ? (
+                    <Image 
+                      src="/banco.png" 
+                      alt="Banco" 
+                      width={80} 
+                      height={80}
+                      className="object-contain"
+                    />
+                  ) : (
+                    <Image 
+                      src="/mercado.png" 
+                      alt="Mercado" 
+                      width={80} 
+                      height={80}
+                      className="object-contain"
+                    />
                   )}
                 </div>
                 
-                {/* Imagen Mercado */}
-                <div className="flex justify-center py-2">
-                  <Image 
-                    src="/mercado.png" 
-                    alt="Mercado" 
-                    width={80} 
-                    height={80}
-                    className="object-contain"
-                  />
-                </div>
-                
                 <div ref={marketCounterRef}>
-                  <p className={`text-5xl font-black ${marketTotal >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  <p className={`text-5xl font-black text-center ${marketTotal >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                     ${animatedMarketTotal.toFixed(1)}M
                   </p>
                 </div>
 
-                <p ref={marketDescRef} className="text-sm text-slate-600 font-medium">
+                <p ref={marketDescRef} className="text-sm text-slate-600 font-medium text-center">
                   {getMarketDescription(progress)}
                 </p>
               </div>
