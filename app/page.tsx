@@ -199,7 +199,7 @@ export default function Home() {
                 </div>
 
                 <p ref={habiDescRef} className="text-sm text-slate-600 font-medium">
-                  Recibes tu cuota fija
+                  {getHabiDescription(progress)}
                 </p>
               </div>
 
@@ -216,7 +216,7 @@ export default function Home() {
                 </div>
 
                 <p ref={marketDescRef} className="text-sm text-slate-600 font-medium">
-                  Pagas gastos de tener un inmueble
+                  {getMarketDescription(progress)}
                 </p>
               </div>
 
