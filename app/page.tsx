@@ -99,25 +99,26 @@ const phases = [
   },
 ] as const;
 
-const habiPayments = [20, 10, 10, 10, 10, 10, 10, 10, 10, 5];
+// Habi: 100M dividido en 9 cuotas = 11.11M por mes
+const habiMonthlyPayment = 100 / 9;
+const habiPayments = Array(9).fill(habiMonthlyPayment);
+
+// Mercado: gastos mensuales de 1.5M durante 9 meses, luego recibe 110M
+const monthlyExpenses = 1.5;
 const marketCosts = [
-  -4,
-  -4,
-  -4,
-  -4,
-  -4,
-  -4,
-  -4,
-  -4,
-  110,
-  0,
+  ...Array(9).fill(-monthlyExpenses),
+  110 // Venta final
 ];
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [habiAccumulated, setHabiAccumulated] = useState(0);
+  const [marketAccumulated, setMarketAccumulated] = useState(0);
   const stepRefs = useRef<HTMLDivElement[]>([]);
   const stickyCardRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<HTMLDivElement>(null);
+  const habiCounterRef = useRef<HTMLDivElement>(null);
+  const marketCounterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -189,6 +190,46 @@ export default function Home() {
 
   const showChart = activeIndex >= phases.length - 2;
 
+  // Animar contadores cuando cambia el activeIndex
+  useEffect(() => {
+    const newHabiAccumulated = habiPayments.slice(0, activeIndex + 1).reduce((acc, val) => acc + val, 0);
+    const newMarketAccumulated = marketCosts.slice(0, activeIndex + 1).reduce((acc, val) => acc + val, 0);
+
+    // Animar contador de Habi
+    gsap.to({ value: habiAccumulated }, {
+      value: newHabiAccumulated,
+      duration: 0.8,
+      ease: "power2.out",
+      onUpdate: function() {
+        setHabiAccumulated(this.targets()[0].value);
+      }
+    });
+
+    // Animar contador de Mercado
+    gsap.to({ value: marketAccumulated }, {
+      value: newMarketAccumulated,
+      duration: 0.8,
+      ease: "power2.out",
+      onUpdate: function() {
+        setMarketAccumulated(this.targets()[0].value);
+      }
+    });
+
+    // Efecto de pulso en los contadores
+    if (habiCounterRef.current) {
+      gsap.fromTo(habiCounterRef.current, 
+        { scale: 1 },
+        { scale: 1.1, duration: 0.3, yoyo: true, repeat: 1, ease: "power2.inOut" }
+      );
+    }
+    if (marketCounterRef.current) {
+      gsap.fromTo(marketCounterRef.current,
+        { scale: 1 },
+        { scale: 1.1, duration: 0.3, yoyo: true, repeat: 1, ease: "power2.inOut" }
+      );
+    }
+  }, [activeIndex]);
+
   useEffect(() => {
     if (showChart && chartRef.current) {
       gsap.fromTo(
@@ -239,76 +280,117 @@ export default function Home() {
 
         <div className="relative mt-24">
           <div ref={stickyCardRef} className="sticky top-24 z-10 rounded-3xl border border-white/60 bg-white/90 p-8 shadow-2xl backdrop-blur-md">
-            <div className="grid gap-8 md:grid-cols-[0.9fr_1.1fr_1fr] md:items-start">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
-                  {phases[activeIndex].month}
-                </p>
-                <h2 className="mt-4 text-2xl font-semibold text-[#5a2dfa]">
-                  Flujo en el mercado
-                </h2>
-                <p className="mt-2 text-base leading-relaxed text-slate-600">
-                  {phases[activeIndex].marketDescription}
-                </p>
-              </div>
+            <div className="mb-8 text-center">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
+                {phases[activeIndex].month}
+              </p>
+            </div>
 
-              <div className="relative overflow-hidden rounded-2xl border border-[#5a2dfa]/20 bg-gradient-to-br from-white to-[#f5f0ff] p-6 shadow-lg">
-                <div className="mb-4 flex items-center gap-2">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#5a2dfa] text-white">
+            <div className="grid gap-6 md:grid-cols-2 mb-8">
+              {/* Contador Habi */}
+              <div className="relative overflow-hidden rounded-2xl border-2 border-[#5a2dfa]/30 bg-gradient-to-br from-[#5a2dfa]/5 to-[#5a2dfa]/10 p-6 shadow-lg">
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#5a2dfa] text-white font-bold text-lg">
                     H
                   </div>
                   <div className="text-left">
-                    <p className="text-xs uppercase tracking-[0.2em] text-[#5a2dfa]/80">Habi</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-[#5a2dfa]/80 font-semibold">Habi</p>
                     <p className="text-sm font-semibold text-slate-800">
                       {phases[activeIndex].habiHeadline}
                     </p>
                   </div>
                 </div>
-                <p className="text-base leading-relaxed text-slate-600">
+                
+                <div ref={habiCounterRef} className="my-6">
+                  <p className="text-sm text-slate-600 mb-1">Acumulado recibido:</p>
+                  <p className="text-4xl font-bold text-[#5a2dfa]">
+                    ${habiAccumulated.toFixed(1)}M
+                  </p>
+                  {activeIndex < 9 && (
+                    <p className="text-sm text-slate-500 mt-2">
+                      + ${habiMonthlyPayment.toFixed(1)}M este mes
+                    </p>
+                  )}
+                </div>
+
+                <p className="text-sm leading-relaxed text-slate-600">
                   {phases[activeIndex].habiDescription}
                 </p>
-                <div className="mt-6 rounded-xl bg-white/90 p-4 text-sm text-slate-500">
-                  <p>
-                    Oferta 1 cuota: 100M • 3 cuotas: 102M • 6 cuotas: 103M • 9 cuotas: 105M
-                  </p>
-                  <p className="mt-2 font-semibold text-[#5a2dfa]">
-                    Estás siguiendo el plan de 9 cuotas fijas: 105M asegurados.
-                  </p>
-                </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200/60 bg-white/70 p-6 shadow-inner">
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
-                  ¿Qué estás pagando?
+              {/* Contador Mercado */}
+              <div className="relative overflow-hidden rounded-2xl border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100/50 p-6 shadow-lg">
+                <div className="mb-4">
+                  <p className="text-xs uppercase tracking-[0.2em] text-red-700/80 font-semibold">Mercado Tradicional</p>
+                  <p className="text-sm font-semibold text-slate-800 mt-1">
+                    {phases[activeIndex].marketHeadline}
+                  </p>
+                </div>
+                
+                <div ref={marketCounterRef} className="my-6">
+                  <p className="text-sm text-slate-600 mb-1">Resultado neto:</p>
+                  <p className={`text-4xl font-bold ${marketAccumulated >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    ${marketAccumulated.toFixed(1)}M
+                  </p>
+                  {activeIndex < 9 ? (
+                    <p className="text-sm text-red-600 mt-2">
+                      - ${monthlyExpenses}M en gastos este mes
+                    </p>
+                  ) : (
+                    <p className="text-sm text-green-600 mt-2">
+                      + $110M de la venta - $13.5M en gastos = $96.5M neto
+                    </p>
+                  )}
+                </div>
+
+                <p className="text-sm leading-relaxed text-slate-600">
+                  {phases[activeIndex].marketDescription}
                 </p>
-                <ul className="mt-4 space-y-3 text-sm text-slate-600">
-                  <li className={`${activeIndex >= 0 ? "opacity-100" : "opacity-40"} transition-opacity`}>
-                    Administración y servicios
-                  </li>
-                  <li className={`${activeIndex >= 2 ? "opacity-100" : "opacity-40"} transition-opacity`}>
-                    Reparaciones y mantenimiento
-                  </li>
-                  <li className={`${activeIndex >= 4 ? "opacity-100" : "opacity-40"} transition-opacity`}>
-                    Documentos, certificados, avalúos
-                  </li>
-                  <li className={`${activeIndex >= 6 ? "opacity-100" : "opacity-40"} transition-opacity`}>
-                    Costos financieros del comprador
-                  </li>
-                </ul>
               </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200/60 bg-slate-50/70 p-6 shadow-inner">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-3">
+                Gastos del mercado tradicional:
+              </p>
+              <ul className="grid grid-cols-2 gap-3 text-sm text-slate-600">
+                <li className={`${activeIndex >= 0 ? "opacity-100" : "opacity-40"} transition-opacity flex items-center gap-2`}>
+                  <span className="text-red-500">•</span> Administración y servicios
+                </li>
+                <li className={`${activeIndex >= 2 ? "opacity-100" : "opacity-40"} transition-opacity flex items-center gap-2`}>
+                  <span className="text-red-500">•</span> Reparaciones
+                </li>
+                <li className={`${activeIndex >= 4 ? "opacity-100" : "opacity-40"} transition-opacity flex items-center gap-2`}>
+                  <span className="text-red-500">•</span> Certificados y avalúos
+                </li>
+                <li className={`${activeIndex >= 6 ? "opacity-100" : "opacity-40"} transition-opacity flex items-center gap-2`}>
+                  <span className="text-red-500">•</span> Costos financieros
+                </li>
+              </ul>
+              <p className="mt-4 text-sm font-semibold text-slate-700">
+                Total gastos 9 meses: ~$13.5M ($1.5M/mes)
+              </p>
             </div>
 
             <div ref={chartRef} className={`mt-12 grid gap-6 transition-all duration-700 md:grid-cols-2 ${showChart ? "opacity-100" : "opacity-0 translate-y-6"}`}>
               <div>
                 <h3 className="text-lg font-semibold text-slate-800">
-                  Resultado acumulado después de 9 meses
+                  Resultado final después de 9 meses
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                  Con Habi recibes 105 millones en cuotas seguras y sin gastos extra. En el mercado tradicional recibes 110 millones, pero después de asumir cerca de 32 millones en egresos durante 9 meses.
+                  Con Habi recibes <strong className="text-[#5a2dfa]">$100M</strong> en 9 cuotas fijas, sin gastos adicionales ni preocupaciones.
                 </p>
-                <p className="mt-4 text-sm font-semibold text-[#5a2dfa]">
-                  Diferencia neta aproximada: 105M Habi vs. 78M mercado.
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  En el mercado tradicional recibes $110M por la venta, pero gastas <strong className="text-red-600">$13.5M</strong> en 9 meses ($1.5M/mes) = <strong className="text-green-600">$96.5M neto</strong>.
                 </p>
+                <div className="mt-6 rounded-xl bg-[#5a2dfa]/10 border-2 border-[#5a2dfa]/30 p-4">
+                  <p className="text-lg font-bold text-[#5a2dfa]">
+                    Habi te da $3.5M más + tranquilidad garantizada
+                  </p>
+                  <p className="text-sm text-slate-600 mt-1">
+                    $100M Habi vs $96.5M Mercado tradicional
+                  </p>
+                </div>
               </div>
               <div className="relative flex items-center justify-center">
                 <svg viewBox="0 0 320 200" className="h-48 w-full">
@@ -377,12 +459,12 @@ export default function Home() {
                   </g>
                   <g transform="translate(50,20)" className={`transition-opacity duration-700 ${showChart ? "opacity-100" : "opacity-0"}`}>
                     <circle cx="0" cy="170" r="6" fill="#5a2dfa" />
-                    <text x="12" y="174" className="fill-slate-500 text-xs">
-                      Habi 105M
+                    <text x="12" y="174" className="fill-slate-500 text-xs font-semibold">
+                      Habi $100M
                     </text>
                     <circle cx="120" cy="170" r="6" fill="#ef4444" />
-                    <text x="132" y="174" className="fill-slate-500 text-xs">
-                      Mercado 78M
+                    <text x="132" y="174" className="fill-slate-500 text-xs font-semibold">
+                      Mercado $96.5M
                     </text>
                   </g>
                 </svg>
