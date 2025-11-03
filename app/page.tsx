@@ -401,8 +401,8 @@ export default function Home() {
                     {/* Valor en el punto actual */}
                     {isCurrentMonth && (
                       <>
-                        <rect x={x - 35} y={month === 9 ? y + 25 : y + 11} width="70" height="24" rx="4" fill="#7400C2" />
-                        <text x={x} y={month === 9 ? y + 43 : y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
+                        <rect x={month === 9 ? x - 55 : x - 35} y={month === 9 ? y + 25 : y + 11} width="70" height="24" rx="4" fill="#7400C2" />
+                        <text x={month === 9 ? x - 20 : x} y={month === 9 ? y + 43 : y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
                           ${value.toFixed(1)}M
                     </text>
                       </>
@@ -479,8 +479,8 @@ export default function Home() {
                     {/* Valor en el punto actual */}
                     {isCurrentMonth && (
                       <>
-                        <rect x={x - 35} y={month === 9 ? y - 60 : y + 11} width="70" height="24" rx="4" fill={color} />
-                        <text x={x} y={month === 9 ? y - 42 : y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
+                        <rect x={x - 35} y={month === 9 ? y - 45 : y + 11} width="70" height="24" rx="4" fill={color} />
+                        <text x={x} y={month === 9 ? y - 27 : y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
                           {month === 9 ? `$${value.toFixed(1)}M` : `-$${(month * marketExpensePerMonth).toFixed(1)}M`}
                     </text>
                       </>
