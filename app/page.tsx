@@ -1,6 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const phases = [
   {
@@ -112,33 +116,58 @@ const marketCosts = [
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const stepRefs = useRef<HTMLDivElement[]>([]);
+  const stickyCardRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const observers: IntersectionObserver[] = [];
+    const ctx = gsap.context(() => {
+      // Animación de entrada del header
+      gsap.from("header > *", {
+        opacity: 0,
+        y: 30,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
+      });
 
-    stepRefs.current.forEach((element, index) => {
-      if (!element) return;
+      // Animación del sticky card al inicio
+      if (stickyCardRef.current) {
+        gsap.from(stickyCardRef.current, {
+          opacity: 0,
+          scale: 0.95,
+          duration: 1,
+          delay: 0.5,
+          ease: "power3.out",
+        });
+      }
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setActiveIndex(index);
-            }
-          });
-        },
-        {
-          root: null,
-          threshold: 0.45,
-        }
-      );
+      // ScrollTrigger para cada fase
+      stepRefs.current.forEach((element, index) => {
+        if (!element) return;
 
-      observer.observe(element);
-      observers.push(observer);
+        ScrollTrigger.create({
+          trigger: element,
+          start: "top center",
+          end: "bottom center",
+          onEnter: () => {
+            setActiveIndex(index);
+            // Animación suave del contenido
+            gsap.to(stickyCardRef.current, {
+              scale: 1.02,
+              duration: 0.3,
+              ease: "power2.out",
+              yoyo: true,
+              repeat: 1,
+            });
+          },
+          onEnterBack: () => setActiveIndex(index),
+        });
+      });
     });
 
     return () => {
-      observers.forEach((observer) => observer.disconnect());
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
@@ -160,6 +189,39 @@ export default function Home() {
 
   const showChart = activeIndex >= phases.length - 2;
 
+  useEffect(() => {
+    if (showChart && chartRef.current) {
+      gsap.fromTo(
+        chartRef.current,
+        {
+          opacity: 0,
+          y: 40,
+          scale: 0.9,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1,
+          ease: "power3.out",
+        }
+      );
+
+      // Animar líneas de la gráfica
+      const lines = chartRef.current.querySelectorAll("line[stroke='#5a2dfa'], line[stroke='#ef4444']");
+      gsap.fromTo(
+        lines,
+        { strokeDashoffset: 1000, strokeDasharray: 1000 },
+        {
+          strokeDashoffset: 0,
+          duration: 1.5,
+          ease: "power2.out",
+          stagger: 0.05,
+        }
+      );
+    }
+  }, [showChart]);
+
   return (
     <section className="relative min-h-screen overflow-x-hidden bg-gradient-to-b from-white via-[#f6f2ff] to-[#d9dcff] text-slate-900">
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-20 md:px-12 lg:px-20">
@@ -176,7 +238,7 @@ export default function Home() {
         </header>
 
         <div className="relative mt-24">
-          <div className="sticky top-24 z-10 rounded-3xl border border-white/60 bg-white/90 p-8 shadow-2xl backdrop-blur-md">
+          <div ref={stickyCardRef} className="sticky top-24 z-10 rounded-3xl border border-white/60 bg-white/90 p-8 shadow-2xl backdrop-blur-md">
             <div className="grid gap-8 md:grid-cols-[0.9fr_1.1fr_1fr] md:items-start">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
@@ -236,7 +298,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className={`mt-12 grid gap-6 transition-all duration-700 md:grid-cols-2 ${showChart ? "opacity-100" : "opacity-0 translate-y-6"}`}>
+            <div ref={chartRef} className={`mt-12 grid gap-6 transition-all duration-700 md:grid-cols-2 ${showChart ? "opacity-100" : "opacity-0 translate-y-6"}`}>
               <div>
                 <h3 className="text-lg font-semibold text-slate-800">
                   Resultado acumulado después de 9 meses
