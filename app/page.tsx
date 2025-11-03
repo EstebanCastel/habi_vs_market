@@ -173,8 +173,8 @@ export default function Home() {
           <div className="flex gap-8 items-start">
             
             {/* Mes - Izquierda */}
-            <div className="flex-shrink-0 pt-4">
-              <p className="text-sm uppercase tracking-widest text-slate-400 mb-3 font-semibold">Mes</p>
+            <div className="flex-shrink-0">
+              <p className="text-sm uppercase tracking-widest text-slate-400 mb-2 font-semibold">Mes</p>
               <p className="text-9xl font-black" style={{ color: "#7400C2" }}>
                 {progress}
               </p>
@@ -189,7 +189,7 @@ export default function Home() {
                   Habi
                 </p>
                 
-                {/* Logo Habi - Cambia en mes 1 */}
+                {/* Logo Habi - cambia en mes 1 */}
                 <div className="py-2">
                   <Image 
                     src={progress === 1 ? "/mes1.png" : "/habi.png"}
@@ -212,17 +212,25 @@ export default function Home() {
               </div>
 
               {/* Mercado */}
-              <div ref={marketCardRef} className="space-y-4 flex flex-col items-center pt-6">
+              <div ref={marketCardRef} className="space-y-4 flex flex-col items-center">
                 <p className="text-xs uppercase tracking-widest font-black text-center text-slate-700">
                   Mercado tradicional
                 </p>
                 
-                {/* Imagen Mercado / Comprador / Banco - cambia según el mes */}
+                {/* Imagen Mercado / Comprador / Banco / Mes9 - cambia según el mes */}
                 <div className="py-2">
                   {progress === 6 ? (
                     <Image 
                       src="/comprador.png" 
                       alt="Comprador" 
+                      width={80} 
+                      height={80}
+                      className="object-contain"
+                    />
+                  ) : progress === 9 ? (
+                    <Image 
+                      src="/mes9.png" 
+                      alt="Venta completada" 
                       width={80} 
                       height={80}
                       className="object-contain"
