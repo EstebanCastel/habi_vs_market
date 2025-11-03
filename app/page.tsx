@@ -173,9 +173,9 @@ export default function Home() {
           <div className="flex gap-8 items-start">
             
             {/* Mes - Izquierda */}
-            <div className="flex-shrink-0">
-              <p className="text-sm uppercase tracking-widest text-slate-400 mb-2 font-semibold">Mes</p>
-              <p className="text-8xl font-black" style={{ color: "#7400C2" }}>
+            <div className="flex-shrink-0 pt-4">
+              <p className="text-sm uppercase tracking-widest text-slate-400 mb-3 font-semibold">Mes</p>
+              <p className="text-9xl font-black" style={{ color: "#7400C2" }}>
                 {progress}
               </p>
             </div>
@@ -189,10 +189,10 @@ export default function Home() {
                   Habi
                 </p>
                 
-                {/* Logo Habi */}
+                {/* Logo Habi - Cambia en mes 1 */}
                 <div className="py-2">
                   <Image 
-                    src="/habi.png" 
+                    src={progress === 1 ? "/mes1.png" : "/habi.png"}
                     alt="Habi" 
                     width={80} 
                     height={80}
@@ -212,14 +212,22 @@ export default function Home() {
               </div>
 
               {/* Mercado */}
-              <div ref={marketCardRef} className="space-y-4 flex flex-col items-center">
+              <div ref={marketCardRef} className="space-y-4 flex flex-col items-center pt-6">
                 <p className="text-xs uppercase tracking-widest font-black text-center text-slate-700">
                   Mercado tradicional
                 </p>
                 
-                {/* Imagen Mercado / Banco - cambia en mes 7+ */}
+                {/* Imagen Mercado / Comprador / Banco - cambia según el mes */}
                 <div className="py-2">
-                  {progress >= 7 ? (
+                  {progress === 6 ? (
+                    <Image 
+                      src="/comprador.png" 
+                      alt="Comprador" 
+                      width={80} 
+                      height={80}
+                      className="object-contain"
+                    />
+                  ) : progress >= 7 ? (
                     <Image 
                       src="/banco.png" 
                       alt="Banco" 
