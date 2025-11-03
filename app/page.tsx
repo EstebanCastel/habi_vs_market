@@ -45,69 +45,54 @@ export default function Home() {
   useEffect(() => {
     const tl = gsap.timeline();
 
-    // Animar salida de las cards (fade out y slide) - MÁS EVIDENTE
+    // Fade out suave de las cards
     tl.to([habiCardRef.current, marketCardRef.current], {
-      opacity: 0.3,
-      y: -20,
-      scale: 0.97,
-      duration: 0.4,
-      ease: "power3.in"
+      opacity: 0.6,
+      duration: 0.3,
+      ease: "power2.inOut"
     });
 
-    // Animar contadores - MÁS LENTO
+    // Animar contadores con efecto suave
     tl.to({ value: animatedHabiTotal }, {
       value: habiTotal,
-      duration: 1.2,
-      ease: "power3.out",
+      duration: 0.8,
+      ease: "power2.inOut",
       onUpdate: function() {
         setAnimatedHabiTotal(this.targets()[0].value);
       }
-    }, "-=0.2");
+    }, "-=0.15");
 
     tl.to({ value: animatedMarketTotal }, {
       value: marketTotal,
-      duration: 1.2,
-      ease: "power3.out",
+      duration: 0.8,
+      ease: "power2.inOut",
       onUpdate: function() {
         setAnimatedMarketTotal(this.targets()[0].value);
       }
     }, "<");
 
-    // Animar entrada de las cards (fade in y slide) - MÁS EVIDENTE
+    // Fade in suave de las cards
     tl.to([habiCardRef.current, marketCardRef.current], {
       opacity: 1,
-      y: 0,
-      scale: 1,
-      duration: 0.6,
-      ease: "power3.out"
-    }, "-=0.8");
+      duration: 0.3,
+      ease: "power2.inOut"
+    }, "-=0.4");
 
-    // Animar descripciones - MÁS DRAMÁTICO
+    // Animar descripciones con fade simple
     if (habiDescRef.current) {
       tl.fromTo(habiDescRef.current,
-        { opacity: 0, x: -40, scale: 0.95 },
-        { opacity: 1, x: 0, scale: 1, duration: 0.6, ease: "power3.out" },
-        "-=0.4"
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: "power2.out" },
+        "-=0.2"
       );
     }
 
     if (marketDescRef.current) {
       tl.fromTo(marketDescRef.current,
-        { opacity: 0, x: -40, scale: 0.95 },
-        { opacity: 1, x: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: "power2.out" },
         "<"
       );
-    }
-
-    // Efecto más evidente en el card principal
-    if (cardRef.current) {
-      gsap.to(cardRef.current, {
-        scale: 1.02,
-        duration: 0.3,
-        yoyo: true,
-        repeat: 1,
-        ease: "power2.inOut"
-      });
     }
   }, [progress]);
 
