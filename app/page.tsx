@@ -154,10 +154,6 @@ export default function Home() {
       <div className="container mx-auto px-6 py-12 max-w-5xl">
         {/* Header */}
         <header className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white mb-6" style={{ backgroundColor: "#8A00E6" }}>
-            <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-            Nuevo producto Habi
-          </div>
           <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight tracking-tight" style={{ color: "#7400C2" }}>
             Vende con cuotas fijas vs mercado tradicional
           </h1>
