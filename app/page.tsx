@@ -30,15 +30,15 @@ export default function Home() {
 
   // Descripciones por mes para Habi
   const getHabiDescription = (month: number) => {
-    if (month === months) return "Recibes tu última cuota fija";
-    return "Recibes tu cuota fija";
+    if (month === months) return "🎉 ¡Completaste el plan! Recibiste tu última cuota fija";
+    return "💰 Recibes tu cuota fija mensual garantizada";
   };
 
   // Descripciones por mes para Mercado
   const getMarketDescription = (month: number) => {
-    if (month === 9) return "Recibes la venta menos los gastos acumulados";
-    if (month === 6) return "¡Consigues comprador! Pagas gastos de tener un inmueble";
-    return "Pagas gastos de tener un inmueble";
+    if (month === 9) return "✅ Venta completada: Recibes el pago menos todos los gastos acumulados";
+    if (month === 6) return "🎊 ¡Consigues comprador! Inicia el proceso bancario. Sigues pagando gastos";
+    return "⏳ Esperando comprador... Sigues pagando gastos del inmueble";
   };
 
   // Función para disparar confetti
@@ -198,7 +198,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <p ref={habiDescRef} className="text-sm text-slate-600 font-medium">
+                <p ref={habiDescRef} className="text-base font-bold leading-relaxed" style={{ color: "#7400C2" }}>
                   {getHabiDescription(progress)}
                 </p>
               </div>
@@ -215,7 +215,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <p ref={marketDescRef} className="text-sm text-slate-600 font-medium">
+                <p ref={marketDescRef} className={`text-base font-bold leading-relaxed ${progress === 6 ? 'text-green-600' : 'text-slate-700'}`}>
                   {getMarketDescription(progress)}
                 </p>
               </div>
