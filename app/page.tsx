@@ -384,33 +384,6 @@ export default function Home() {
                 />
               )}
               
-              {/* Puntos y valores Habi */}
-              {[...Array(Math.min(progress, 9))].map((_, i) => {
-                const month = i + 1;
-                const x = 60 + (month * (700 / 9));
-                const value = month * habiPerMonth;
-                const y = 280 - (value / 110) * 230;
-                const isCurrentMonth = month === progress;
-                
-                return (
-                  <g key={`habi-point-${i}`}>
-                    {/* Punto */}
-                    <circle cx={x} cy={y} r={isCurrentMonth ? 8 : 6} fill="white" stroke="#7400C2" strokeWidth="3" />
-                    <circle cx={x} cy={y} r={isCurrentMonth ? 4 : 3} fill="#7400C2" />
-                    
-                    {/* Valor en el punto actual */}
-                    {isCurrentMonth && (
-                      <>
-                        <rect x={month === 9 ? x + 5 : x - 35} y={month === 9 ? y + 25 : y + 11} width="70" height="24" rx="4" fill="#7400C2" />
-                        <text x={month === 9 ? x + 40 : x} y={month === 9 ? y + 43 : y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
-                          ${value.toFixed(1)}M
-                    </text>
-                      </>
-                    )}
-                  </g>
-                );
-              })}
-              
               {/* Línea Mercado - Parte Roja (Meses 1-8 o hasta el progress actual) */}
               {progress > 0 && (
                 <polyline
@@ -482,6 +455,33 @@ export default function Home() {
                         <rect x={x - 35} y={month === 9 ? y - 45 : y + 11} width="70" height="24" rx="4" fill={color} />
                         <text x={x} y={month === 9 ? y - 27 : y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
                           {month === 9 ? `$${value.toFixed(1)}M` : `-$${(month * marketExpensePerMonth).toFixed(1)}M`}
+                    </text>
+                      </>
+                    )}
+                  </g>
+                );
+              })}
+              
+              {/* Puntos y valores Habi (dibujados al final para que estén encima) */}
+              {[...Array(Math.min(progress, 9))].map((_, i) => {
+                const month = i + 1;
+                const x = 60 + (month * (700 / 9));
+                const value = month * habiPerMonth;
+                const y = 280 - (value / 110) * 230;
+                const isCurrentMonth = month === progress;
+                
+                return (
+                  <g key={`habi-point-${i}`}>
+                    {/* Punto */}
+                    <circle cx={x} cy={y} r={isCurrentMonth ? 8 : 6} fill="white" stroke="#7400C2" strokeWidth="3" />
+                    <circle cx={x} cy={y} r={isCurrentMonth ? 4 : 3} fill="#7400C2" />
+                    
+                    {/* Valor en el punto actual */}
+                    {isCurrentMonth && (
+                      <>
+                        <rect x={month === 9 ? x - 55 : x - 35} y={month === 9 ? y + 25 : y + 11} width="70" height="24" rx="4" fill="#7400C2" />
+                        <text x={month === 9 ? x - 20 : x} y={month === 9 ? y + 43 : y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
+                          ${value.toFixed(1)}M
                     </text>
                       </>
                     )}
