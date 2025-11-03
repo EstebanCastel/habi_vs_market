@@ -28,7 +28,7 @@ export default function Home() {
   const marketFinalSale = 110;
 
   const habiTotal = progress * habiPerMonth;
-  const marketTotal = progress === months ? marketFinalSale - (months * marketExpensePerMonth) : -(progress * marketExpensePerMonth);
+  const marketTotal = progress === months ? marketFinalSale : -(progress * marketExpensePerMonth);
 
   // Descripciones por mes para Habi
   const getHabiDescription = (month: number) => {
@@ -38,7 +38,6 @@ export default function Home() {
 
   // Descripciones por mes para Mercado
   const getMarketDescription = (month: number) => {
-    if (month === 9) return "Recibes la venta menos los gastos acumulados";
     if (month === 7) return "Comienzan los trámites del banco. Pagas gastos de tener un inmueble";
     if (month === 6) return "¡Consigues comprador! Pagas gastos de tener un inmueble";
     return "Pagas gastos de tener un inmueble";
@@ -263,7 +262,13 @@ export default function Home() {
               </div>
 
                 <p ref={marketDescRef} className="text-sm font-medium text-center">
-                  {progress === 6 ? (
+                  {progress === 9 ? (
+                    <>
+                      <span className="text-slate-600">Recibes la venta</span>
+                      <br />
+                      <span className="text-metallic-red text-base">Durante 8 meses tuviste gastos de $7.2M</span>
+                    </>
+                  ) : progress === 6 ? (
                     <>
                       <span className="text-metallic-purple text-lg">¡Consigues comprador!</span>
                       <br />
@@ -433,7 +438,7 @@ export default function Home() {
                     
                     // Mes 9
                     const x9 = 60 + (9 * (700 / 9));
-                    const value9 = marketFinalSale - (months * marketExpensePerMonth);
+                    const value9 = marketFinalSale;
                     const y9 = 280 - (value9 / 110) * 230;
                     points.push(`${x9},${y9}`);
                     
@@ -453,7 +458,7 @@ export default function Home() {
                 const x = 60 + (month * (700 / 9));
                 let value;
                 if (month === 9) {
-                  value = marketFinalSale - (months * marketExpensePerMonth);
+                  value = marketFinalSale;
                 } else {
                   value = 0;
                 }

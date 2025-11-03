@@ -65,3 +65,20 @@ body {
   animation: shine 8s linear infinite;
   font-weight: 900;
 }
+
+.text-metallic-red {
+  background: linear-gradient(
+    135deg,
+    #b91c1c 0%,
+    #dc2626 25%,
+    #f87171 50%,
+    #dc2626 75%,
+    #b91c1c 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 8s linear infinite;
+  font-weight: 900;
+}
