@@ -74,6 +74,10 @@ export default function Home() {
         confettiDisparadoRef.current = true;
       }, 300);
     }
+    // Resetear si baja del mes 6
+    if (progress < 6) {
+      confettiDisparadoRef.current = false;
+    }
   }, [progress]);
 
   // Animar contadores cuando cambia el progress
@@ -264,7 +268,7 @@ export default function Home() {
                 <p ref={marketDescRef} className="text-sm font-medium text-center">
                   {progress === 9 ? (
                     <>
-                      <span className="text-slate-600">Recibes la venta</span>
+                      <span className="text-slate-600">Recibes el valor que querías por la venta de tu inmueble pero...</span>
                       <br />
                       <span className="text-metallic-red text-base">Durante 8 meses tuviste gastos de $7.2M</span>
                     </>
@@ -397,8 +401,8 @@ export default function Home() {
                     {/* Valor en el punto actual */}
                     {isCurrentMonth && (
                       <>
-                        <rect x={x - 35} y={y - 35} width="70" height="24" rx="4" fill="#7400C2" />
-                        <text x={x} y={y - 17} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
+                        <rect x={x - 35} y={month === 9 ? y + 25 : y + 11} width="70" height="24" rx="4" fill="#7400C2" />
+                        <text x={x} y={month === 9 ? y + 43 : y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
                           ${value.toFixed(1)}M
                     </text>
                       </>
@@ -475,8 +479,8 @@ export default function Home() {
                     {/* Valor en el punto actual */}
                     {isCurrentMonth && (
                       <>
-                        <rect x={x - 35} y={y + 11} width="70" height="24" rx="4" fill={color} />
-                        <text x={x} y={y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
+                        <rect x={x - 35} y={month === 9 ? y - 60 : y + 11} width="70" height="24" rx="4" fill={color} />
+                        <text x={x} y={month === 9 ? y - 42 : y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
                           {month === 9 ? `$${value.toFixed(1)}M` : `-$${(month * marketExpensePerMonth).toFixed(1)}M`}
                     </text>
                       </>
