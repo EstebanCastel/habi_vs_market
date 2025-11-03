@@ -401,8 +401,8 @@ export default function Home() {
                     {/* Valor en el punto actual */}
                     {isCurrentMonth && (
                       <>
-                        <rect x={month === 9 ? x - 55 : x - 35} y={month === 9 ? y + 25 : y + 11} width="70" height="24" rx="4" fill="#7400C2" />
-                        <text x={month === 9 ? x - 20 : x} y={month === 9 ? y + 43 : y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
+                        <rect x={month === 9 ? x + 5 : x - 35} y={month === 9 ? y + 25 : y + 11} width="70" height="24" rx="4" fill="#7400C2" />
+                        <text x={month === 9 ? x + 40 : x} y={month === 9 ? y + 43 : y + 29} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
                           ${value.toFixed(1)}M
                     </text>
                       </>
