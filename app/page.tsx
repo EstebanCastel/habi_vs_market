@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import confetti from "canvas-confetti";
@@ -188,6 +189,17 @@ export default function Home() {
                   Habi
                 </p>
                 
+                {/* Logo Habi */}
+                <div className="flex justify-center py-2">
+                  <Image 
+                    src="/habi.png" 
+                    alt="Habi" 
+                    width={80} 
+                    height={80}
+                    className="object-contain"
+                  />
+                </div>
+                
                 <div ref={habiCounterRef}>
                   <p className="text-5xl font-black" style={{ color: "#7400C2" }}>
                     ${animatedHabiTotal.toFixed(1)}M
@@ -200,10 +212,36 @@ export default function Home() {
               </div>
 
               {/* Mercado */}
-              <div ref={marketCardRef} className="space-y-4">
-                <p className="text-xs uppercase tracking-widest font-black text-slate-700">
-                  Mercado tradicional
-                </p>
+              <div ref={marketCardRef} className="space-y-4 relative">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs uppercase tracking-widest font-black text-slate-700">
+                    Mercado tradicional
+                  </p>
+                  
+                  {/* Imagen del banco - aparece desde el mes 7 */}
+                  {progress >= 7 && (
+                    <div className="animate-fadeIn">
+                      <Image 
+                        src="/banco.png" 
+                        alt="Banco" 
+                        width={50} 
+                        height={50}
+                        className="object-contain"
+                      />
+                    </div>
+                  )}
+                </div>
+                
+                {/* Imagen Mercado */}
+                <div className="flex justify-center py-2">
+                  <Image 
+                    src="/mercado.png" 
+                    alt="Mercado" 
+                    width={80} 
+                    height={80}
+                    className="object-contain"
+                  />
+                </div>
                 
                 <div ref={marketCounterRef}>
                   <p className={`text-5xl font-black ${marketTotal >= 0 ? 'text-green-600' : 'text-red-600'}`}>
