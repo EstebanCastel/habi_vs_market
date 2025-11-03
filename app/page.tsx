@@ -273,7 +273,7 @@ export default function Home() {
         </div>
 
         {/* Scroll Area */}
-        <div ref={scrollContainerRef} className="h-[400vh]" />
+        <div ref={scrollContainerRef} className="h-[900vh]" />
       </div>
     </section>
   );
